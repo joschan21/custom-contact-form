@@ -1,5 +1,5 @@
 export interface option {
-  img: string
+  img: string | JSX.Element // link to img url or JSX Icon
   caption: string
 }
 

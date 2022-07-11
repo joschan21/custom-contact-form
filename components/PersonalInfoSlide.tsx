@@ -1,17 +1,51 @@
-import { FC, FormEvent } from 'react'
+import { ChangeEvent, FC, FormEvent, useState } from 'react'
 import { HiMail, HiPhone, HiUser } from 'react-icons/hi'
+import { SingleSelectAnswer } from '../typings'
 
 interface PersonalInfoSlideProps {
   title: string
   subtitle: string
+  answers: SingleSelectAnswer[]
   slideNext: () => void
 }
 
-const PersonalInfoSlide: FC<PersonalInfoSlideProps> = ({ title, subtitle, slideNext }) => {
+const PersonalInfoSlide: FC<PersonalInfoSlideProps> = ({ title, subtitle, answers, slideNext }) => {
+  const [input, setInput] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+  })
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setInput((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    /**
+     * formattedAnswers: convert array of strings for each answer to human readable string concatenation
+     * Before: {question: 'Question?', answer: ['Option 1', 'Option 2]}
+     * After: {question: 'Question?', answer: 'Option 1, Option 2'}
+     */
+
+    const formattedAnswers = answers.map((answer, index) => ({
+      question: answer.question,
+      answer: answers[index].answer.join(', '),
+    }))
+
+    const { name, email } = input
+
+    // Handle this data, for example send to E-Mail
+
     slideNext()
   }
+
   return (
     <div className='w-full p-1'>
       <div className='sm:text-center'>
@@ -31,7 +65,9 @@ const PersonalInfoSlide: FC<PersonalInfoSlideProps> = ({ title, subtitle, slideN
             </div>
             <input
               type='text'
-              name='full-name'
+              name='name'
+              onChange={(e) => handleChange(e)}
+              value={input.name}
               required
               className='focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md'
               placeholder='Max Mustermann'
@@ -49,6 +85,8 @@ const PersonalInfoSlide: FC<PersonalInfoSlideProps> = ({ title, subtitle, slideN
             <input
               type='email'
               name='email'
+              onChange={(e) => handleChange(e)}
+              value={input.email}
               required
               className='focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md'
               placeholder='max@mustermann.de'
@@ -66,6 +104,8 @@ const PersonalInfoSlide: FC<PersonalInfoSlideProps> = ({ title, subtitle, slideN
             <input
               type='text'
               name='phone'
+              onChange={(e) => handleChange(e)}
+              value={input.phone}
               className='focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md'
               placeholder='0171 123456'
             />
@@ -78,9 +118,10 @@ const PersonalInfoSlide: FC<PersonalInfoSlideProps> = ({ title, subtitle, slideN
           <textarea
             id='message'
             name='message'
+            onChange={(e) => handleChange(e)}
+            value={input.message}
             rows={4}
             className='block w-full shadow-sm py-3 px-4 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 rounded-md'
-            defaultValue={''}
           />
         </div>
         <div className='w-full flex justify-center'>

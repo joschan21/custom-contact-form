@@ -1,5 +1,4 @@
 import { Dispatch, FC, SetStateAction } from 'react'
-import { answerCardStyle, selectedAnswerStyle } from '../../config/classNames'
 import { option, SingleSelectAnswer } from '../../typings'
 
 interface SingleSelectProps {
@@ -68,9 +67,9 @@ const SingleSelect: FC<SingleSelectProps> = ({
             <div
               key={`option-${index}`}
               onClick={() => handleSelection(index)}
-              className={`${answerCardStyle} ${isSelected && selectedAnswerStyle}`}>
+              className={`answerCardStyle ${isSelected && 'selectedAnswerStyle'}`}>
               <dt className='order-2 mt-2 text-lg leading-6 font-medium text-gray-500'>{option.caption}</dt>
-              <dd className='order-1 text-5xl font-extrabold text-indigo-600'>100%</dd>
+              <dd className='order-1 text-5xl font-extrabold text-indigo-600'>{option.img}</dd>
             </div>
           )
         })}

@@ -85,6 +85,7 @@ const ContactForm: FC<ContactFormProps> = ({}) => {
                     <PersonalInfoSlide
                       title={question.title}
                       subtitle={question.subtitle}
+                      answers={answers}
                       slideNext={slideNext}
                     />
                   </SwiperSlide>

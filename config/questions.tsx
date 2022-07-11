@@ -1,39 +1,46 @@
+import { AiOutlineQuestion, AiOutlineUser, AiOutlineUserAdd, AiOutlineUsergroupAdd } from 'react-icons/ai'
+import { HiCheck, HiX } from 'react-icons/hi'
+
 const questions = [
   {
     type: 'single_select',
     title: 'Ist eine Bühne vorhanden?',
-    subtitle: 'lorem ipsum',
+    subtitle: 'Ist an dem Ort des gewünschten Auftrittes bereits eine Bühne oder Vergleichbares vorhanden.',
     options: [
       {
-        img: '',
+        img: <HiCheck />,
         caption: 'Ja',
       },
       {
-        img: '',
+        img: <HiX />,
         caption: 'Nein',
       },
       {
-        img: '',
+        img: <AiOutlineQuestion />,
         caption: 'Weiß ich nicht',
       },
     ],
   },
   {
     type: 'single_select',
-    title: 'question2',
-    subtitle: 'lorem ipsum',
+    title: 'Wie groß ist das Publikum?',
+    subtitle: '',
     options: [
       {
-        img: '',
-        caption: 'Weiter gehts',
+        img: <AiOutlineUser />,
+        caption: 'Weniger als 20',
       },
       {
-        img: '',
-        caption: 'Weiter gehts',
+        img: <AiOutlineUserAdd />,
+        caption: '20 - 100 Personen',
       },
       {
-        img: '',
-        caption: 'Weiter gehts',
+        img: <AiOutlineUsergroupAdd />,
+        caption: '100+ Personen',
+      },
+      {
+        img: <AiOutlineQuestion />,
+        caption: 'Weiß ich nicht',
       },
     ],
   },

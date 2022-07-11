@@ -1,5 +1,4 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
-import { answerCardStyle, selectedAnswerStyle } from '../../config/classNames'
 import { option, SingleSelectAnswer } from '../../typings'
 
 interface MultipleSelectProps {
@@ -93,14 +92,14 @@ const MultipleSelect: FC<MultipleSelectProps> = ({
             <div
               key={`option-${index}`}
               onClick={() => handleSelection(index)}
-              className={`${answerCardStyle} ${isSelected && selectedAnswerStyle}`}>
+              className={`answerCardStyle ${isSelected && 'selectedAnswerStyle'}`}>
               <dt className='order-2 mt-2 text-lg leading-6 font-medium text-gray-500'>{option.caption}</dt>
               <dd className='order-1 text-5xl font-extrabold text-indigo-600'>100%</dd>
             </div>
           )
         })}
       </dl>
-      <p className='text-sm text-gray-500 text-center pt-2'>Mehrfachauswahl möglich</p>
+      <p className='text-sm text-gray-500 text-center pt-2'>Mehrfachauswahl möglich.</p>
     </div>
   )
 }
