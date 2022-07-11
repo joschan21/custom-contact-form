@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, FormEvent, useState } from 'react'
 import { HiMail, HiPhone, HiUser } from 'react-icons/hi'
-import { SingleSelectAnswer } from '../typings'
+import { SingleSelectAnswer } from './typings'
 
 interface PersonalInfoSlideProps {
   title: string

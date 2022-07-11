@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
-import { option, SingleSelectAnswer } from '../../typings'
+import { option, SingleSelectAnswer } from './../typings'
 
 interface MultipleSelectProps {
   title: string
