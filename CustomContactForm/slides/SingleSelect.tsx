@@ -1,5 +1,5 @@
-import { Dispatch, FC, SetStateAction } from 'react'
-import { option, SingleSelectAnswer } from './../typings'
+import { Dispatch, FC, Fragment, SetStateAction } from 'react'
+import { option, SingleSelectAnswer } from '../typings'
 
 interface SingleSelectProps {
   title: string
@@ -64,13 +64,27 @@ const SingleSelect: FC<SingleSelectProps> = ({
           const isSelected = answers[currentQuestionIndex]?.answer.includes(option.caption)
 
           return (
-            <div
-              key={`option-${index}`}
-              onClick={() => handleSelection(index)}
-              className={`answerCardStyle ${isSelected && 'selectedAnswerStyle'}`}>
-              <dt className='order-2 mt-2 text-lg leading-6 font-medium text-gray-500'>{option.caption}</dt>
-              <dd className='order-1 text-5xl font-extrabold text-indigo-600'>{option.img}</dd>
-            </div>
+            <Fragment key={`answer-${index}`}>
+              {/* Desktop answer */}
+              <div
+                onClick={() => handleSelection(index)}
+                className={`hidden sm:flex desktop-card ${isSelected && 'desktop-card-selected'}`}>
+                <dt className='order-2 sm:mt-2 text-lg leading-6 font-medium text-gray-500'>
+                  {option.caption}
+                </dt>
+                <dd className='order-1 text-3xl sm:text-5xl font-extrabold text-indigo-600'>{option.img}</dd>
+              </div>
+
+              {/* Mobile answer */}
+              <div
+                onClick={() => handleSelection(index)}
+                className={`sm:hidden mobile-card ${isSelected && 'mobile-card-selected '}`}>
+                <dt className='order-2 sm:mt-2 text-lg leading-6 font-medium text-gray-500'>
+                  {option.caption}
+                </dt>
+                <dd className='order-1 text-3xl sm:text-5xl font-extrabold text-indigo-600'>{option.img}</dd>
+              </div>
+            </Fragment>
           )
         })}
       </dl>

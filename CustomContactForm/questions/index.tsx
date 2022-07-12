@@ -47,19 +47,19 @@ const questions = [
   {
     type: 'multiple_select',
     title: 'Wer ist anwesend?',
-    maxOptions: 2,
+    maxOptions: 3,
     subtitle: 'lorem ipsum',
     options: [
       {
-        img: '',
+        img: <AiOutlineUser />,
         caption: 'Kinder',
       },
       {
-        img: '',
+        img: <AiOutlineUser />,
         caption: 'Erwachsene',
       },
       {
-        img: '',
+        img: <AiOutlineUser />,
         caption: 'Senioren',
       },
     ],

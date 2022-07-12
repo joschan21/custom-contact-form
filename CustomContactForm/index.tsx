@@ -8,11 +8,11 @@ import 'swiper/css'
 import { FC, useState } from 'react'
 import SwiperType from 'swiper'
 import ProgressBar from './ProgressBar'
-import questions from './config'
+import questions from './questions'
 import { SingleSelectAnswer } from './typings'
 import PersonalInfoSlide from './PersonalInfoSlide'
-import MultipleSelect from './questions/MultipleSelect'
-import SingleSelect from './questions/SingleSelect'
+import MultipleSelect from './slides/MultipleSelect'
+import SingleSelect from './slides/SingleSelect'
 import ThankYouPage from './ThankYouPage'
 
 interface ContactFormProps {}
@@ -39,7 +39,7 @@ const ContactForm: FC<ContactFormProps> = ({}) => {
   const onThankYouPage = currentSlideIndex === questions.length - 1
 
   return (
-    <div className='w-full rounded-lg bg-gray-100 p-6'>
+    <div className='w-full rounded-lg contact-form-background p-6'>
       <div className='sm:p-4'>
         <Swiper
           centeredSlides={true}
@@ -51,7 +51,7 @@ const ContactForm: FC<ContactFormProps> = ({}) => {
             switch (question.type) {
               case 'single_select':
                 return (
-                  <SwiperSlide key={question.title}>
+                  <SwiperSlide key={question.title} className='contact-form-background'>
                     <SingleSelect
                       title={question.title}
                       subtitle={question.subtitle}
@@ -65,7 +65,7 @@ const ContactForm: FC<ContactFormProps> = ({}) => {
                 )
               case 'multiple_select':
                 return (
-                  <SwiperSlide key={question.title}>
+                  <SwiperSlide key={question.title} className='contact-form-background'>
                     <MultipleSelect
                       title={question.title}
                       subtitle={question.subtitle}
@@ -81,7 +81,7 @@ const ContactForm: FC<ContactFormProps> = ({}) => {
                 )
               case 'personal_info':
                 return (
-                  <SwiperSlide key={question.title}>
+                  <SwiperSlide key={question.title} className='contact-form-background'>
                     <PersonalInfoSlide
                       title={question.title}
                       subtitle={question.subtitle}
@@ -92,7 +92,7 @@ const ContactForm: FC<ContactFormProps> = ({}) => {
                 )
               case 'thank_you':
                 return (
-                  <SwiperSlide key={question.title}>
+                  <SwiperSlide key={question.title} className='contact-form-background'>
                     <ThankYouPage title={question.title} subtitle={question.subtitle} />
                   </SwiperSlide>
                 )
@@ -107,8 +107,8 @@ const ContactForm: FC<ContactFormProps> = ({}) => {
             type='button'
             onClick={slidePrev}
             disabled={swiperRef?.isBeginning}
-            className='inline-flex aspect-square transition items-center p-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 disabled:bg-gray-300 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
-            <HiArrowSmLeft className='text-2xl' />
+            className='inline-flex aspect-square transition items-center p-3 sm:p-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 disabled:bg-gray-300 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
+            <HiArrowSmLeft className='text-3xl sm:text-2xl' />
           </button>
           <div className='w-full'>
             {progress !== undefined && <ProgressBar percentFilled={progressWithoutLastPage} />}
@@ -117,8 +117,8 @@ const ContactForm: FC<ContactFormProps> = ({}) => {
             type='button'
             onClick={slideNext}
             disabled={swiperRef?.isEnd || !answers[currentSlideIndex]}
-            className='inline-flex aspect-square transition items-center p-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 disabled:bg-gray-300 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
-            <HiArrowSmRight className='text-2xl' />
+            className='inline-flex aspect-square transition items-center p-3 sm:p-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 disabled:bg-gray-300 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
+            <HiArrowSmRight className='text-3xl sm:text-2xl' />
           </button>
         </div>
       )}
