@@ -1,119 +1,121 @@
-import { Dispatch, FC, SetStateAction, useEffect, useState, Fragment } from 'react'
+import { Dispatch, FC, Fragment, SetStateAction, useEffect } from 'react'
+import questions from '../questions'
 import { option, SingleSelectAnswer } from '../typings'
 
 interface MultipleSelectProps {
-  title: string
-  subtitle: string
-  options?: option[]
   questionIndex: number // Index of question currently being shown to user
   answers: SingleSelectAnswer[]
-  currentSlideIndex: number
+  getImg: (img: string | JSX.Element) => JSX.Element
   setAnswers: Dispatch<SetStateAction<SingleSelectAnswer[]>>
   slideNext: () => void
-  maxOptions?: number
 }
 
 const MultipleSelect: FC<MultipleSelectProps> = ({
-  title,
-  subtitle,
-  options,
-  questionIndex: currentQuestionIndex,
+  questionIndex,
   answers,
-  currentSlideIndex,
+  getImg,
   setAnswers,
   slideNext,
-  maxOptions = options!.length,
 }) => {
-  const [selectedIndices, setSelectedIndices] = useState<number[]>([])
+  // Constant Definitions
+  const options: option[] | undefined = questions[questionIndex].options
+  const { title, subtitle, maxOptions = options?.length } = questions[questionIndex]
+  const amountOptionsSelected = answers[questionIndex]?.answer?.length
 
+  // Action Handlers
   const handleSelection = (index: number) => {
     /**
-     * For now, remember all selected answers.
-     * If option was not checked previously, add to array of selected indexes
-     * If option was checked previously and is being unchecked, remove from array of selected indexes
+     * If question was not answered, simply add to array
+     * If question was answered but caption was not selected as one of the answers, simply add to array of selected answers
+     * If question was answered and already selected (is being unselected), remove from array of selected answers
      */
 
-    setSelectedIndices((prev) => {
-      if (prev.includes(index)) return [...prev.filter((i) => i !== index)]
-      return [...prev, index]
-    })
-  }
+    // If question has not been answered yet, add to array. Else, replace existing answer.
+    const alreadyAnsweredAtIndex = answers.findIndex((slide) => slide.question === title)
+    const hasAlreadyBeenAnswered = alreadyAnsweredAtIndex !== -1
 
-  useEffect(() => {
-    if (currentSlideIndex === currentQuestionIndex) {
-      const selectedOptions = options!.filter((_, index) => selectedIndices.includes(index))
-      const selectedCaptions = selectedOptions.map((option) => option.caption)
+    if (!hasAlreadyBeenAnswered && options) {
+      setAnswers((prev) => [
+        ...prev,
+        {
+          question: title,
+          answer: [options[index].caption],
+        },
+      ])
+    } else if (hasAlreadyBeenAnswered && options) {
+      // make copy of previous answer array
+      const prevAnswer = answers[questionIndex].answer
 
-      // If question has not been answered yet, add to array. Else, replace existing answer.
-      const questionIndex = answers.findIndex((slide) => slide.question === title)
-      const hasAlreadyBeenAnswered = questionIndex !== -1
+      // determine if this answer was selected before
+      const wasSelected = prevAnswer.includes(options[index].caption)
 
-      if (!hasAlreadyBeenAnswered) {
-        setAnswers((prev) => [
-          ...prev,
-          {
-            question: title,
-            answer: selectedCaptions,
-          },
-        ])
-      } else if (hasAlreadyBeenAnswered) {
+      if (!wasSelected) {
         setAnswers((prev) => {
-          let copy = prev
-          copy[questionIndex].answer = selectedCaptions
+          let copy = [...prev]
+          let prevAnswer = { ...copy[questionIndex] }
+          prevAnswer.answer = [...prevAnswer.answer, options[index].caption]
 
+          copy[questionIndex] = prevAnswer
+          return copy
+        })
+      } else if (wasSelected) {
+        setAnswers((prev) => {
+          let copy = [...prev]
+          let prevAnswer = { ...copy[questionIndex] }
+          prevAnswer.answer = prevAnswer.answer.filter((caption) => caption !== options[index].caption)
+
+          copy[questionIndex] = prevAnswer
           return copy
         })
       }
     }
-  }, [selectedIndices])
+  }
 
   /**
    * If all options have been checked || max no. of options are checked, switch to next slide
    */
 
   useEffect(() => {
-    const submit = selectedIndices.length === maxOptions
+    const submit = amountOptionsSelected === maxOptions
     if (submit) slideNext()
-  }, [selectedIndices])
+  }, [amountOptionsSelected])
 
   return (
     <div className='w-full'>
       <div className='sm:text-center'>
-        <p className='mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl'>
+        <p className='mt-2 text-3xl leading-8 font-extrabold tracking-tight title-color sm:text-4xl'>
           {title}
         </p>
-        <p className='mt-4 max-w-2xl text-xl text-gray-500 sm:mx-auto'>{subtitle}</p>
+        <p className='mt-4 max-w-2xl text-xl text-color sm:mx-auto'>{subtitle}</p>
       </div>
       <dl className='sm:flex sm:flex-wrap sm:justify-center gap-10 mt-12 mb-2'>
-        {options!.map((option, index) => {
+        {options?.map((option, index) => {
           // Card should have the "selected card" style applied
-          const isSelected = selectedIndices.includes(index)
+          const isSelected = answers[questionIndex]?.answer.includes(options[index].caption)
+          const img = getImg(option.img)
+
           return (
             <Fragment key={`answer-${index}`}>
               {/* Desktop answer */}
               <div
                 onClick={() => handleSelection(index)}
                 className={`hidden sm:flex desktop-card ${isSelected && 'desktop-card-selected'}`}>
-                <dt className='order-2 sm:mt-2 text-lg leading-6 font-medium text-gray-500'>
-                  {option.caption}
-                </dt>
-                <dd className='order-1 text-3xl sm:text-5xl font-extrabold text-indigo-600'>{option.img}</dd>
+                <dt className='order-2 sm:mt-2 text-lg leading-6 font-medium text-color'>{option.caption}</dt>
+                <dd className='order-1 text-3xl sm:text-5xl font-extrabold text-indigo-600'>{img}</dd>
               </div>
 
               {/* Mobile answer */}
               <div
                 onClick={() => handleSelection(index)}
                 className={`sm:hidden mobile-card ${isSelected && 'mobile-card-selected '}`}>
-                <dt className='order-2 sm:mt-2 text-lg leading-6 font-medium text-gray-500'>
-                  {option.caption}
-                </dt>
-                <dd className='order-1 text-3xl sm:text-5xl font-extrabold text-indigo-600'>{option.img}</dd>
+                <dt className='order-2 sm:mt-2 text-lg leading-6 font-medium text-color'>{option.caption}</dt>
+                <dd className='order-1 text-3xl sm:text-5xl font-extrabold text-indigo-600'>{img}</dd>
               </div>
             </Fragment>
           )
         })}
       </dl>
-      <p className='text-sm text-gray-500 text-center pt-2'>Mehrfachauswahl möglich.</p>
+      <p className='text-sm text-color text-center pt-2'>Mehrfachauswahl möglich.</p>
     </div>
   )
 }
