@@ -16,7 +16,13 @@
     @apply shadow-md border-indigo-600;
   }
   .contact-form-background {
-    @apply bg-gray-100;
+    @apply bg-gray-200;
+  }
+  .title-color {
+    @apply text-black;
+  }
+  .text-color {
+    @apply text-gray-500;
   }
 }
 

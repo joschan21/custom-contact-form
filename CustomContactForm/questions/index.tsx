@@ -70,15 +70,15 @@ const questions = [
     subtitle: 'lorem ipsum',
     options: [
       {
-        img: '',
+        img: '/example_icon.png',
         caption: 'Kinder',
       },
       {
-        img: '',
+        img: '/example_icon.png',
         caption: 'Erwachsene',
       },
       {
-        img: '',
+        img: '/example_icon.png',
         caption: 'Senioren',
       },
     ],

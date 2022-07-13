@@ -8,15 +8,15 @@ interface ThankYouPageProps {
 
 const ThankYouPage: FC<ThankYouPageProps> = ({ title, subtitle }) => {
   return (
-    <div>
-      <div className='mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100'>
-        <HiCheck className='h-6 w-6 text-indigo-600' aria-hidden='true' />
+    <div className=''>
+      <div className='sm:mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-primary/20'>
+        <HiCheck className='h-6 w-6 text-primary' aria-hidden='true' />
       </div>
-      <div className='sm:text-center'>
-        <p className='mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl'>
+      <div className='sm:text-center mt-4'>
+        <p className='mt-2 text-2xl leading-8 font-extrabold tracking-tight title-color sm:text-3xl'>
           {title}
         </p>
-        <p className='mt-4 max-w-2xl text-xl text-gray-500 sm:mx-auto'>{subtitle}</p>
+        <p className='mt-4 max-w-2xl text-base text-textcolor sm:mx-auto'>{subtitle}</p>
       </div>
     </div>
   )

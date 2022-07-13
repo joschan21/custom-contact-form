@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 
 // import required modules
-import { FC, useState } from 'react'
+import { FC, useRef, useState } from 'react'
 import SwiperType from 'swiper'
 import ProgressBar from './ProgressBar'
 import questions from './questions'
@@ -14,16 +14,16 @@ import PersonalInfoSlide from './PersonalInfoSlide'
 import MultipleSelect from './slides/MultipleSelect'
 import SingleSelect from './slides/SingleSelect'
 import ThankYouPage from './ThankYouPage'
+import Image from 'next/image'
 
-interface ContactFormProps {}
-
-const ContactForm: FC<ContactFormProps> = ({}) => {
+const ContactForm: FC = () => {
   const [swiperRef, setSwiperRef] = useState<null | SwiperType>(null)
   const [progress, setProgress] = useState<undefined | number>(0)
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
+  const swiperSectionRef = useRef<null | HTMLDivElement>(null)
 
   const [answers, setAnswers] = useState<SingleSelectAnswer[]>([])
-  console.log('answers', answers)
+  console.log("answers", answers)
 
   const slideNext = () => {
     setCurrentSlideIndex((prev) => prev + 1)
@@ -35,12 +35,38 @@ const ContactForm: FC<ContactFormProps> = ({}) => {
     swiperRef?.slidePrev()
   }
 
+  const getImg = (img: string | JSX.Element) => {
+    /**
+     * img is either url or JSX Icon
+     */
+    if (typeof img === 'string') {
+      return (
+        <div className='relative w-12 h-12 sm:w-16 sm:h-16' aria-hidden='true'>
+          <Image
+            lazyRoot={swiperSectionRef}
+            loading='eager'
+            src={img}
+            layout='responsive'
+            height={128}
+            width={128}
+            alt='decorative_icon'
+          />
+        </div>
+      )
+    } else
+      return (
+        <div aria-hidden='true' className='w-16 h-16 flex justify-center items-center'>
+          {img}
+        </div>
+      )
+  }
+
   const progressWithoutLastPage = Math.abs(currentSlideIndex / (questions.length - 2))
   const onThankYouPage = currentSlideIndex === questions.length - 1
 
   return (
-    <div className='w-full rounded-lg contact-form-background p-6'>
-      <div className='sm:p-4'>
+    <div className='overflow-hidden rounded-lg contact-form-background p-6'>
+      <div ref={swiperSectionRef} className='sm:p-4'>
         <Swiper
           centeredSlides={true}
           autoHeight={true}
@@ -52,12 +78,11 @@ const ContactForm: FC<ContactFormProps> = ({}) => {
               case 'single_select':
                 return (
                   <SwiperSlide key={question.title} className='contact-form-background'>
+                    {/* className to override overflowing shadows */}
                     <SingleSelect
-                      title={question.title}
-                      subtitle={question.subtitle}
-                      options={question.options}
                       questionIndex={index}
                       answers={answers}
+                      getImg={getImg}
                       setAnswers={setAnswers}
                       slideNext={slideNext}
                     />
@@ -67,15 +92,11 @@ const ContactForm: FC<ContactFormProps> = ({}) => {
                 return (
                   <SwiperSlide key={question.title} className='contact-form-background'>
                     <MultipleSelect
-                      title={question.title}
-                      subtitle={question.subtitle}
-                      options={question.options}
                       questionIndex={index}
-                      currentSlideIndex={currentSlideIndex}
                       answers={answers}
+                      getImg={getImg}
                       setAnswers={setAnswers}
                       slideNext={slideNext}
-                      maxOptions={question.maxOptions}
                     />
                   </SwiperSlide>
                 )
@@ -86,6 +107,7 @@ const ContactForm: FC<ContactFormProps> = ({}) => {
                       title={question.title}
                       subtitle={question.subtitle}
                       answers={answers}
+                      swiperRef={swiperRef}
                       slideNext={slideNext}
                     />
                   </SwiperSlide>
@@ -108,7 +130,7 @@ const ContactForm: FC<ContactFormProps> = ({}) => {
             onClick={slidePrev}
             disabled={swiperRef?.isBeginning}
             className='inline-flex aspect-square transition items-center p-3 sm:p-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 disabled:bg-gray-300 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
-            <HiArrowSmLeft className='text-3xl sm:text-2xl' />
+            <HiArrowSmLeft className='text-white text-3xl sm:text-2xl' />
           </button>
           <div className='w-full'>
             {progress !== undefined && <ProgressBar percentFilled={progressWithoutLastPage} />}
@@ -118,7 +140,7 @@ const ContactForm: FC<ContactFormProps> = ({}) => {
             onClick={slideNext}
             disabled={swiperRef?.isEnd || !answers[currentSlideIndex]}
             className='inline-flex aspect-square transition items-center p-3 sm:p-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 disabled:bg-gray-300 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
-            <HiArrowSmRight className='text-3xl sm:text-2xl' />
+            <HiArrowSmRight className='text-white text-3xl sm:text-2xl' />
           </button>
         </div>
       )}

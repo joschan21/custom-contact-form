@@ -22,16 +22,16 @@ Third, copy the basic element styles inside `globals.css`:
 ```bash
 @layer base {
   .desktop-card {
-    @apply min-w-[180px] cursor-pointer sm:flex sm:flex-col sm:items-center sm:gap-0 rounded-lg bg-white border-2 transition p-8 text-center hover:shadow-md hover:border-indigo-600 shadow-sm border-gray-100;
+    @apply min-w-[180px] cursor-pointer sm:flex sm:flex-col sm:items-center sm:gap-0 rounded-lg bg-white border-2 transition p-8 text-center hover:shadow-md hover:border-accent-600 shadow-sm border-gray-100;
   }
   .desktop-card-selected {
-    @apply shadow-md border-indigo-600;
+    @apply shadow-md border-accent-600;
   }
   .mobile-card {
     @apply flex gap-4 items-center my-2 p-4 cursor-pointer rounded-lg bg-white border shadow-sm border-gray-200;
   }
   .mobile-card-selected {
-    @apply shadow-md border-indigo-600;
+    @apply shadow-md border-accent-600;
   }
   .contact-form-background {
     @apply bg-gray-100;
